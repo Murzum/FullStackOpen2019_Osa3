@@ -36,16 +36,11 @@ let persons = [
 
     app.get('/info', (req, res) => {
 
-        const notesCount = () =>  {
-            
-            return (
-                '<h2>Phonebook has info for ' + persons.length + ' people</h2>'           
-            )
-        }
+        const notesCount = () =>  persons.length
 
         const getTimeInfo = () => {
 
-            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+            const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
             const today = new Date()
             const weekday = days[today.getDay()]
@@ -53,17 +48,28 @@ let persons = [
             const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
             const datetime = date+' '+time
 
-            return ('<h2>Today is: ' + weekday + ' ' + datetime + '</h2>')
+            return (weekday + ' ' + datetime)
         }
 
-        res.send( notesCount() + getTimeInfo() )
+        res.send( '<h2>Phonebook has info for ' + notesCount() + ' people</h2><h2>Today is: ' + getTimeInfo() + '</h2>' )
 
     })
       
-    app.get('/api/persons', (req, res) => {
+    app.get('/persons', (req, res) => {
         res.json(persons)
     })
-    
+
+    app.get('/persons/:id', (req, res) => {
+        const id = Number(req.params.id)
+        const person = persons.find(person => person.id === id)
+        if (person) {
+            res.json(person)
+        } 
+        else {
+            res.status(404).end()
+        }
+    })
+  
     const PORT = 3001
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`)
