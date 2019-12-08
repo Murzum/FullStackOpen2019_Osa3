@@ -86,7 +86,6 @@ let persons = [
         res.status(204).end()
     })
 
-
     // POST person  
     app.post('/api/persons', (req, res) => {
         const body = req.body
