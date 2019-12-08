@@ -101,16 +101,25 @@ let persons = [
                 error: 'Number missing!' 
             })
         }
+
+        const nameexists = persons.find(person => person.name === body.name)
         
-        const person= {
-            name: body.name,
-            number: body.number,
-            id: generateId(1000000000),
+        if (!nameexists) {
+            const person= {
+                name: body.name,
+                number: body.number,
+                id: generateId(1000000000),
+            }
+        
+            persons = persons.concat(person)
+        
+            res.json(person)
         }
-        
-        persons = persons.concat(person)
-        
-        res.json(person)
+        else {
+            return res.status(400).json({ 
+                error: 'Name must be unique!' 
+            })
+        }
     })
 
     const PORT = 3001
